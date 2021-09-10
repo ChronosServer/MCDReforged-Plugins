@@ -105,7 +105,7 @@ def on_info(server, info):
         COUNTING = True
 
         for countdown in range(0, CountDown):
-            tell_msg(server, f"还有{CountDown-countdown}秒")
+            tell_msg(server, f"{CountDown-countdown}seconds")
             if ABORT:
                 ABORT = False
                 break
