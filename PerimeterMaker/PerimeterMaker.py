@@ -5,10 +5,10 @@ DELAY = 1
 
 Prefix = "!!perimeter"
 help_msg = '''========== Perimeter Maker ==========
-§6{0}§r 显示这条信息
-§6{0} make §b<length> <width>§r 以当前位置为中心清理一个空置域
-§6{0} commit§r 在使用make后使用，确认操作
-§6{0} abort§r 在任何时候中断操作'''.format(Prefix)
+§6{0}§r Show this message
+§6{0} make §b<length> <width>§r Clear a perimeter centred on the current position
+§6{0} commit§r Use after using make to confirm the operation
+§6{0} abort§r Interrupt the operation at any time'''.format(Prefix)
 CHUNK = 16
 
 ABORT = False
@@ -36,34 +36,34 @@ def on_info(server, info):
     # !!perimeter abort
     if len(cmd) == 1 and cmd[0] == "abort":
         if not WORKING and not NEED_COMMIT:
-            server.reply(info, "§c没有需要中断的操作")
+            server.reply(info, "§cNo operations requiring interruption")
             return
         ABORT = True
         NEED_COMMIT = False
-        server.reply(info, "§c终止操作！")
+        server.reply(info, "§cTermination of operation！")
         return
     # !!perimeter abort <length> <width>
     if len(cmd) == 3 and cmd[0] == "make":
         if WORKING:
-            server.reply(info, "§c当前正在清理，请等待清理结束！")
+            server.reply(info, "§cCurrently being cleared, please wait for the making of the perimeter to be completed！")
         try:
             p1 = -int(cmd[1])/2 * CHUNK
             p2 = int(cmd[1])/2 * CHUNK
             p3 = -int(cmd[2])/2 * CHUNK
             p4 = int(cmd[2])/2 * CHUNK
         except:
-            server.reply(info, "§c你输入的不是数字！")
+            server.reply(info, "§cInput is not a number！")
         
         NEED_COMMIT = True
-        server.reply(info, "§a请输入§6{} commit§a确认操作！".format(Prefix))
+        server.reply(info, "§aPlease enter§6{} commit §aConfirmation of operation！".format(Prefix))
 
     if len(cmd) == 1 and cmd[0] == "commit":
 
         if not NEED_COMMIT:
-            server.reply(info, "§c没有需要确认的操作")
+            server.reply(info, "§cThere are no operations that require confirmation")
             return
 
-        server.say("§a开始操作！请在§c原地§a耐心等待，§c不要移动")
+        server.say("§aStart the operation! Please wait patiently in §cin place §a, §cdo not move")
         NEED_COMMIT = False
 
         server.execute("carpet fillLimit 1000000")
@@ -76,11 +76,11 @@ def on_info(server, info):
                 break
             y = 255 - i
             command = "execute at {} run fill ~{} {} ~{} ~{} {} ~{} air".format(info.player, p1, y, p3, p2, y, p4)
-            server.say("正在替换第{}层".format(y))
+            server.say("Layer {} is being replaced".format(y))
             time.sleep(DELAY)
             server.execute(command)
         WORKING = False
 
 def on_load(server, old_module):
     global Prefix
-    server.add_help_message(Prefix + " help", "制造空置域帮助")
+    server.add_help_message(Prefix + " help", "Create perimeter help")

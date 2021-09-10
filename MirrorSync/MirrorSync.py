@@ -28,11 +28,11 @@ Prefix = "!!mirror"
 plugin_name = "MirrorSync"
 help_msg = '''
 ======MCDR-MirrorSync======
-§6{0} §r显示这条消息
-§6{0} sync §a同步§r生存服存档至镜像服
-§6{0} commit §a确认§r操作
-§6{0} abort §c终止§r操作'''.format(Prefix)
-format_error_msg = f"§c格式错误！使用§6{Prefix}§c查看帮助！"
+§6{0} §rShow this message
+§6{0} sync §aSync §rsurvival suit archive to mirror suit
+§6{0} commit §aConfirmation of §roperation
+§6{0} abort §cTermination of §roperation'''.format(Prefix)
+format_error_msg = f"§cFormatting error！Use §6{Prefix}§cfor help！"
 
 NEED_COMMIT = False
 COUNTING = False
@@ -75,7 +75,7 @@ def on_info(server, info):
     del cmd[0]
 
     if server.get_permission_level(info) < MinimumPermissionLevel:
-        tell_msg(server, "§c你没有权限执行此命令", True, info.player)
+        tell_msg(server, "§cYou do not have permission to execute this command", True, info.player)
         return
 
     if len(cmd) == 0:
@@ -87,17 +87,17 @@ def on_info(server, info):
             tell_msg(server, format_error_msg, True, info.player)
             return
         NEED_COMMIT = True
-        tell_msg(server, "§a请输入§6!!mirror commit§a确认操作", False)
+        tell_msg(server, "§aPlease enter §6!!mirror commit §ato confirm the operation", False)
 
     if cmd[0] == "commit":
         if len(cmd) != 1:
             tell_msg(server, format_error_msg, True, info.player)
             return
         if NEED_COMMIT == False:
-            tell_msg(server, "§c没有什么需要确认的", False)
+            tell_msg(server, "§cThere is nothing to confirm", False)
             return
 
-        tell_msg(server, "§a操作确认", False)
+        tell_msg(server, "§aOperation confirmation", False)
         NEED_COMMIT = False
 
         ### COUNT DOWN AND SYNC ###
@@ -123,12 +123,12 @@ def on_info(server, info):
 
     if cmd[0] == "abort":
         if COUNTING == True or NEED_COMMIT == True:
-            tell_msg(server, "§c操作终止", False)
+            tell_msg(server, "§cOperation termination", False)
             ABORT = True
             COUNTING = NEED_COMMIT = False
             return
-        tell_msg(server, "§c没有什么需要终止的", False)
+        tell_msg(server, "§cThere is nothing to end", False)
         
 def on_load(server, old_module):
     global Prefix
-    server.add_help_message(Prefix, "镜像服存档同步帮助")
+    server.add_help_message(Prefix, "MirrorSync Help")
